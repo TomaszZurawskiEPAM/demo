@@ -18,20 +18,11 @@ import com.syndicate.deployment.model.lambda.url.InvokeMode;
 
 import java.util.Map;
 
-@LambdaHandler(
-				lambdaName = "hello_world",
-				roleName = "hello-lambda-role",
-				layers = {"sdk-layer"},
-				runtime = DeploymentRuntime.JAVA11,
-				architecture = Architecture.ARM64,
+@LambdaHandler(lambdaName = "hello_world",
+				roleName = "hello_world-role",
+				isPublishVersion = true,
+				aliasName = "${lambdas_alias_name}",
 				logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
-)
-@LambdaLayer(
-				layerName = "sdk-layer",
-				libraries = {"lib/commons-lang3-3.14.0.jar", "lib/gson-2.10.1.jar"},
-				runtime = DeploymentRuntime.JAVA11,
-				architectures = { Architecture.ARM64},
-				artifactExtension = ArtifactExtension.ZIP
 )
 @LambdaUrlConfig(
 				authType = AuthType.NONE,
