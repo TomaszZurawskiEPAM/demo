@@ -19,7 +19,7 @@ import com.syndicate.deployment.model.lambda.url.InvokeMode;
 import java.util.Map;
 
 @LambdaHandler(
-				lambdaName = "hello-lambda",
+				lambdaName = "hello_world",
 				roleName = "hello-lambda-role",
 				layers = {"sdk-layer"},
 				runtime = DeploymentRuntime.JAVA11,
