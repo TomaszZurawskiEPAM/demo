@@ -38,25 +38,25 @@ public class HelloWorld implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 			return APIGatewayV2HTTPResponse.builder()
 							.withStatusCode(200)
 							.withHeaders(Map.of("Content-Type", "application/json"))
-							.withBody(gson.toJson(new Body("Hello from Lambda", null)))
+							.withBody(gson.toJson(new Body(200, "Hello from Lambda")))
 							.build();
 		else
 			return APIGatewayV2HTTPResponse.builder()
 							.withStatusCode(400)
 							.withHeaders(Map.of("Content-Type", "application/json"))
-							.withBody(gson.toJson(new Body(null,"Bad request syntax or unsupported method. Request path: "+requestEvent.getRequestContext().getHttp().getPath()+". HTTP method: "+requestEvent.getRequestContext().getHttp().getMethod())))
+							.withBody(gson.toJson(new Body(400,"Bad request syntax or unsupported method. Request path: "+requestEvent.getRequestContext().getHttp().getPath()+". HTTP method: "+requestEvent.getRequestContext().getHttp().getMethod())))
 							.build();
 	}
 
 	private class Body{
 
+		int statusCode;
 		String message;
-		String error;
 
-		public Body(String message, String error)
+		public Body(int statusCode, String message)
 		{
+			this.statusCode = statusCode;
 			this.message = message;
-			this.error = error;
 		}
 	}
 
