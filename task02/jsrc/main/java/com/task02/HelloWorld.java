@@ -45,11 +45,11 @@ public class HelloWorld implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		if(requestEvent.getRequestContext().getHttp().getMethod().equals("GET") && requestEvent.getRequestContext().getHttp().getPath().equals("/hello"))
-		return APIGatewayV2HTTPResponse.builder()
-						.withStatusCode(200)
-						.withHeaders(Map.of("Content-Type", "application/json"))
-						.withBody(gson.toJson(new Body("Hello from Lambda", null)))
-						.build();
+			return APIGatewayV2HTTPResponse.builder()
+							.withStatusCode(200)
+							.withHeaders(Map.of("Content-Type", "application/json"))
+							.withBody(gson.toJson(new Body("Hello from Lambda", null)))
+							.build();
 		else
 			return APIGatewayV2HTTPResponse.builder()
 							.withStatusCode(400)
@@ -58,17 +58,17 @@ public class HelloWorld implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 							.build();
 	}
 
-private class Body{
+	private class Body{
 
 		String message;
 		String error;
 
-	public Body(String message, String error)
-	{
-		this.message = message;
-		this.error = error;
+		public Body(String message, String error)
+		{
+			this.message = message;
+			this.error = error;
+		}
 	}
-}
 
 	/*public Map<String, Object> handleRequest(Object request, Context context) {
 		System.out.println("Hello from lambda");
