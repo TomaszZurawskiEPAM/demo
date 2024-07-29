@@ -14,13 +14,12 @@ import java.util.Map;
 
 @LambdaHandler(lambdaName = "sqs_handler",
 	roleName = "sqs_handler-role",
-	isPublishVersion = true,
-	aliasName = "${lambdas_alias_name}",
+	isPublishVersion = false,
 	logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 
 @SqsTriggerEventSource(
-				targetQueue = "async_queue", batchSize = 100)
+				targetQueue = "async_queue", batchSize = 1)
 @DependsOn(
 				name = "async_queue",
 				resourceType = ResourceType.SQS_QUEUE
