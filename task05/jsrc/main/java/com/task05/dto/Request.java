@@ -7,16 +7,11 @@ import java.util.Map;
 public class Request
 {
 	int principalId;
-	String content;
+	Map<String, String> content;
 
-	public static Request fromJson(String jsonString){
-		JSONObject json = new JSONObject(jsonString);
-		int principalId = json.optInt("principalId",-1);
-		String content = json.optString("content", null);
-		return new Request(principalId,content);
-	}
+public Request(){}
 
-	public Request(int principalId, String content){
+	public Request(int principalId, Map<String, String> content){
 		this.principalId=principalId;
 		this.content=content;
 	}
@@ -26,7 +21,7 @@ public class Request
 		return principalId;
 	}
 
-	public String getContent()
+	public Map<String, String> getContent()
 	{
 		return content;
 	}

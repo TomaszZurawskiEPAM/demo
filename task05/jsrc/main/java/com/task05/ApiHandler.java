@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.model.RetentionSetting;
 import com.task05.dto.Event;
@@ -27,36 +28,30 @@ import java.util.UUID;
 public class ApiHandler implements RequestHandler<Object, Map<String, Object>> {
 
 AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.DEFAULT_REGION).build();
-	public Map<String, Object> handleRequest(Object request, Context context) {
-		System.out.println("Hello from lambda");
+	public Map<String, Object> handleRequest(Object request, Context context)
+	{
+		try
+		{
+			System.out.println("Hello from lambda");
+			ObjectMapper objectMapper = new ObjectMapper();
 
-		Map<String, Object> event = new HashMap<String, Object>();
-		String uuid = UUID.randomUUID().toString();
-		Request requestDto = Request.fromJson(request.toString());
+
+			Request requestDto = objectMapper.readValue(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request), Request.class);
 
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 		String isoDateTime = now.format(formatter);
 
-		Event eventDto = new Event(UUID.randomUUID().toString(),requestDto.getPrincipalId(),isoDateTime, requestDto.getContent());
+		Event eventDto = new Event(UUID.randomUUID().toString(), requestDto.getPrincipalId(), isoDateTime, requestDto.getContent());
 
-		try
-		{
-			var result = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(eventDto),HashMap.class);
-			amazonDynamoDB.putItem("Events",result);
-		}
-		catch (JsonProcessingException e)
-		{
-			throw new RuntimeException(e);
-		}
+		var map = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(eventDto);
+		var result = new ObjectMapper().readValue(map, HashMap.class);
 
-		Response response = new Response(201,eventDto);
 
-		try
-		{
-			var result = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(response),HashMap.class);
-			return result;
-		}
+		Response response = new Response(201, eventDto);
+
+			return new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(response), HashMap.class);
+	}
 		catch (JsonProcessingException e)
 		{
 			throw new RuntimeException(e);

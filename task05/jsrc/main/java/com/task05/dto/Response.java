@@ -2,8 +2,8 @@ package com.task05.dto;
 
 public class Response
 {
-	int statusCode;
-	Event event;
+	public int statusCode;
+	public Event event;
 
 	public Response(int statusCode, Event event)
 	{
