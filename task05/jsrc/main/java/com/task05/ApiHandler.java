@@ -34,7 +34,7 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 		{
 			System.out.println(request.toString());
 			ObjectMapper objectMapper = new ObjectMapper();
-
+			System.out.println(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request));
 
 			Request requestDto = objectMapper.readValue(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request), Request.class);
 
