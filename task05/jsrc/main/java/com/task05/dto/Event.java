@@ -16,4 +16,24 @@ public class Event
 		this.createdAt = createdAt;
 		this.body = body;
 	}
+
+	public String getId()
+	{
+		return id;
+	}
+
+	public int getPrincipalId()
+	{
+		return principalId;
+	}
+
+	public String getCreatedAt()
+	{
+		return createdAt;
+	}
+
+	public Map<String, String> getBody()
+	{
+		return body;
+	}
 }

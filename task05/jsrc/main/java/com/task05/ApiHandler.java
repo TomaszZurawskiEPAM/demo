@@ -3,6 +3,7 @@ package com.task05;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,8 +46,11 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 		Event eventDto = new Event(UUID.randomUUID().toString(), requestDto.getPrincipalId(), isoDateTime, requestDto.getContent());
 
 		var map = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(eventDto);
-		var result = new ObjectMapper().readValue(map, HashMap.class);
-		amazonDynamoDB.putItem("Events", result);
+		Map<String, AttributeValue> result = new ObjectMapper().readValue(map, HashMap.class);
+result.put("test",new AttributeValue(eventDto.getBody().toString()));
+			System.out.println(map);
+
+		//amazonDynamoDB.putItem("Events", result);
 
 		Response response = new Response(201, eventDto);
 
