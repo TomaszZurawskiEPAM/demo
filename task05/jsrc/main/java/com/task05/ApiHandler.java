@@ -46,7 +46,7 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 
 		var map = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(eventDto);
 		var result = new ObjectMapper().readValue(map, HashMap.class);
-
+		amazonDynamoDB.putItem("Events", result);
 
 		Response response = new Response(201, eventDto);
 
