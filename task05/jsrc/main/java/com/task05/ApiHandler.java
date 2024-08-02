@@ -43,7 +43,7 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 		String isoDateTime = now.format(formatter);
 
-		Event eventDto = new Event(UUID.randomUUID().toString(), requestDto.getPrincipalId(), isoDateTime, requestDto.getContent());
+		Event eventDto = new Event(UUID.randomUUID().toString(), requestDto.getPrincipalId(), isoDateTime/*, requestDto.getContent()*/);
 
 		var map = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(eventDto);
 		Map<String, AttributeValue> result = new ObjectMapper().readValue(map, HashMap.class);
