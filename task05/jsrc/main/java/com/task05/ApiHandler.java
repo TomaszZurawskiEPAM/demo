@@ -32,7 +32,7 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 	{
 		try
 		{
-			System.out.println("Hello from lambda");
+			System.out.println(request.toString());
 			ObjectMapper objectMapper = new ObjectMapper();
 
 
