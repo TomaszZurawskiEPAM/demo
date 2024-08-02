@@ -38,7 +38,7 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 		String isoDateTime = now.format(formatter);
 
-		Event eventDto = new Event(UUID.randomUUID().toString(),requestDto.getPrincipalId(),isoDateTime, requestDto.getContent());
+		Event eventDto = new Event(UUID.randomUUID().toString(),requestDto.principalId(),isoDateTime, requestDto.content());
 
 		try
 		{

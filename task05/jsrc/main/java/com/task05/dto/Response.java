@@ -1,5 +1,13 @@
 package com.task05.dto;
 
-public record Response(int statusCode, Event event)
+public class Response
 {
+	int statusCode;
+	Event event;
+
+	public Response(int statusCode, Event event)
+	{
+		this.statusCode = statusCode;
+		this.event = event;
+	}
 }
