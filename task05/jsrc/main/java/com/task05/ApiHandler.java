@@ -1,9 +1,5 @@
 package com.task05;
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +10,9 @@ import com.syndicate.deployment.model.RetentionSetting;
 import com.task05.dto.Event;
 import com.task05.dto.Request;
 import com.task05.dto.Response;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,14 +20,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@LambdaHandler(lambdaName = "api_handler",
-	roleName = "api_handler-role",
-	isPublishVersion = false,
-	logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
-)
-public class ApiHandler implements RequestHandler<Object, Map<String, Object>> {
+@LambdaHandler(lambdaName = "api_handler", roleName = "api_handler-role", isPublishVersion = false, logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED) public class ApiHandler
+				implements RequestHandler<Object, Map<String, Object>>
+{
 
-AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.DEFAULT_REGION).build();
+	static final DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.create();
+	static final TableSchema<Event> customerTableSchema = TableSchema.fromBean(Event.class);
+	static final DynamoDbTable<Event> customerTable = enhancedClient.table("Customer", TableSchema.fromBean(Event.class));
+
 	public Map<String, Object> handleRequest(Object request, Context context)
 	{
 		try
@@ -37,25 +36,23 @@ AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegio
 			ObjectMapper objectMapper = new ObjectMapper();
 			System.out.println(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request));
 
-			Request requestDto = objectMapper.readValue(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request), Request.class);
+			Request requestDto = objectMapper.readValue(
+							new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request), Request.class);
 
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-		String isoDateTime = now.format(formatter);
+			LocalDateTime now = LocalDateTime.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+			String isoDateTime = now.format(formatter);
 
-		Event eventDto = new Event(UUID.randomUUID().toString(), requestDto.getPrincipalId(), isoDateTime/*, requestDto.getContent()*/);
+			Event eventDto = new Event(UUID.randomUUID().toString(), requestDto.getPrincipalId(),
+							isoDateTime/*, requestDto.getContent()*/);
 
-		var map = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(eventDto);
-		Map<String, AttributeValue> result = new ObjectMapper().readValue(map, HashMap.class);
+			customerTable.putItem(eventDto);
+			System.out.println(eventDto);
 
-			System.out.println(map);
-
-		amazonDynamoDB.putItem("Events", result);
-
-		Response response = new Response(201, eventDto);
+			Response response = new Response(201, eventDto);
 
 			return new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(response), HashMap.class);
-	}
+		}
 		catch (JsonProcessingException e)
 		{
 			throw new RuntimeException(e);
