@@ -16,14 +16,6 @@ public class Event
 	public String createdAt;
 	public Map<String,String> body;
 
-	public Event(String id, int principalId, String createdAt/*, Map<String,String> body*/)
-	{
-		this.id = id;
-		this.principalId = principalId;
-		this.createdAt = createdAt;
-		/*this.body = body;*/
-	}
-
 	@DynamoDbPartitionKey()
 	public String getId()
 	{
@@ -70,4 +62,6 @@ public class Event
 	{
 		return "Event{" + "id='" + id + '\'' + ", principalId=" + principalId + ", createdAt='" + createdAt + '\'' + ", body=" + body + '}';
 	}
+
+
 }
