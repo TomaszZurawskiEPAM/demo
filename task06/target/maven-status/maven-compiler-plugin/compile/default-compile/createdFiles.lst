@@ -1,0 +1,5 @@
+com\task06\AuditProducer.class
+com\task06\dto\AuditModify.class
+com\task06\dto\Response.class
+com\task06\dto\Request.class
+com\task06\dto\AuditInsert.class
