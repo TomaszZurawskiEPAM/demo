@@ -31,7 +31,7 @@ import java.util.UUID;
 				implements RequestHandler<Object, Map<String, Object>>
 {
 
-	final static S3Client s3Client = S3Client.builder().region(Region.CA_CENTRAL_1).build();
+	final static S3Client s3Client = S3Client.builder().region(Region.EU_CENTRAL_1).build();
 
 	public Map<String, Object> handleRequest(Object request, Context context)
 	{
