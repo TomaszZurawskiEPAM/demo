@@ -72,27 +72,28 @@ context.getLogger().log(dynamoEvent.toString());
 			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 			String isoDateTime = now.format(formatter);
 Record record = dynamoEvent.getRecords().get(0);
-			//if (OperationType.fromValue(record.getEventName())(OperationType.)){
-				AuditInsert auditDto = new AuditInsert() ;
+			if (record.getEventName().equals("INSERT"))
+			{
+				AuditInsert auditDto = new AuditInsert();
 				auditDto.setId(UUID.randomUUID().toString());
 				auditDto.setModificationTime(isoDateTime);
 				auditDto.setItemKey(record.getDynamodb().getKeys().get("key").toString());
-				auditDto.setNewValue(Map.of(auditDto.getItemKey(),Integer.valueOf(record.getDynamodb().getNewImage().get("value").toString())));
+				auditDto.setNewValue(Map.of(auditDto.getItemKey(), Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN())));
 
 				//customerTable.createTable();
 				insertTable.putItem(auditDto);
 				System.out.println(auditDto);
 
 				Response response = new Response(201, auditDto);
-
+			}
 
 			if(record.getEventName().equals("MODIFY")){
 				AuditModify auditDto2 = new AuditModify() ;
 				auditDto2.setId(UUID.randomUUID().toString());
 				auditDto2.setModificationTime(isoDateTime);
 				auditDto2.setItemKey(record.getDynamodb().getKeys().get("key").toString());
-				auditDto2.setNewValue(Integer.valueOf(record.getDynamodb().getNewImage().get("value").toString()));
-				auditDto2.setOldValue(Integer.valueOf(record.getDynamodb().getOldImage().get("value").toString()));
+				auditDto2.setNewValue(Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN()));
+				auditDto2.setOldValue(Integer.valueOf(record.getDynamodb().getOldImage().get("value").getN()));
 
 				//customerTable.createTable();
 				modifyTable.putItem(auditDto2);
