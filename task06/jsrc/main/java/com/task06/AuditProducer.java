@@ -71,7 +71,7 @@ context.getLogger().log(dynamoEvent.toString());
 			LocalDateTime now = LocalDateTime.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 			String isoDateTime = now.format(formatter);
-Record record = dynamoEvent.getRecords().get(0);
+Record record = dynamoEvent.getRecords().stream().findFirst().orElse(new DynamodbEvent.DynamodbStreamRecord());
 			if (record.getEventName().equals("INSERT"))
 			{
 				AuditInsert auditDto = new AuditInsert();
