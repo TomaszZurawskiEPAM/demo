@@ -14,7 +14,7 @@ public class AuditInsert
 	private String id;
 	private String itemKey;
 	private String modificationTime;
-	private Map<String,Integer> newValue;
+	private Map<String,Object> newValue;
 
 	@DynamoDbPartitionKey()
 	public String getId()
@@ -33,7 +33,7 @@ public class AuditInsert
 	}
 
 
-	public Map<String, Integer> getNewValue()
+	public Map<String, Object> getNewValue()
 	{
 		return newValue;
 	}
@@ -53,13 +53,13 @@ public class AuditInsert
 		this.modificationTime = modificationTime;
 	}
 
-	public void setNewValue(Map<String, Integer> newValue)
+	public void setNewValue(Map<String, Object> newValue)
 	{
 		this.newValue = newValue;
 	}
 
 	@Override public String toString()
 	{
-		return "Audit{" + "id='" + id + '\'' + ", itemKey='" + itemKey + '\'' + ", modificationTime='" + modificationTime + '\'' + ", newValue=" + newValue + '}';
+		return "AuditInsert{" + "id='" + id + '\'' + ", itemKey='" + itemKey + '\'' + ", modificationTime='" + modificationTime + '\'' + ", newValue=" + newValue + '}';
 	}
 }

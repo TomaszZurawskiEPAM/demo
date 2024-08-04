@@ -77,8 +77,9 @@ Record record = dynamoEvent.getRecords().get(0);
 				AuditInsert auditDto = new AuditInsert();
 				auditDto.setId(UUID.randomUUID().toString());
 				auditDto.setModificationTime(isoDateTime);
-				auditDto.setItemKey(record.getDynamodb().getKeys().get("key").toString());
-				auditDto.setNewValue(Map.of(auditDto.getItemKey(), Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN())));
+				auditDto.setItemKey(record.getDynamodb().getKeys().get("key").getS());
+				auditDto.setNewValue(Map.of("key", auditDto.getItemKey(),"value",
+								Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN())));
 
 				//customerTable.createTable();
 				insertTable.putItem(auditDto);
