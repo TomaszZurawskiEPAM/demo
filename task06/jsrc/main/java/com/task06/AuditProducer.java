@@ -45,10 +45,10 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Map<String, 
 					.dynamoDbClient(standardClient)
 					.build();
 	//static final DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.create();
-	static final DynamoDbTable<AuditInsert> insertTable = enhancedClient.table("cmtr-975a2528-Audit", TableSchema.fromBean(
+	static final DynamoDbTable<AuditInsert> insertTable = enhancedClient.table("cmtr-975a2528-Audit-test", TableSchema.fromBean(
 					AuditInsert.class));
 
-	static final DynamoDbTable<AuditModify> modifyTable = enhancedClient.table("cmtr-975a2528-Audit", TableSchema.fromBean(
+	static final DynamoDbTable<AuditModify> modifyTable = enhancedClient.table("cmtr-975a2528-Audit-test", TableSchema.fromBean(
 					AuditModify.class));
 
 	public Map<String, Object> handleRequest(DynamodbEvent dynamoEvent, Context context)
