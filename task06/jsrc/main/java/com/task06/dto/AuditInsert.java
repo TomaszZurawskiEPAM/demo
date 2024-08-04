@@ -2,6 +2,7 @@ package com.task06.dto;
 
 
 
+import com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
@@ -14,7 +15,7 @@ public class AuditInsert
 	private String id;
 	private String itemKey;
 	private String modificationTime;
-	private Map<String,Object> newValue;
+	private NewValue newValue;
 
 	@DynamoDbPartitionKey()
 	public String getId()
@@ -32,10 +33,14 @@ public class AuditInsert
 		return modificationTime;
 	}
 
-
-	public Map<String, Object> getNewValue()
+	public NewValue getNewValue()
 	{
 		return newValue;
+	}
+
+	public void setNewValue(NewValue newValue)
+	{
+		this.newValue = newValue;
 	}
 
 	public void setId(String id)
@@ -53,10 +58,6 @@ public class AuditInsert
 		this.modificationTime = modificationTime;
 	}
 
-	public void setNewValue(Map<String, Object> newValue)
-	{
-		this.newValue = newValue;
-	}
 
 	@Override public String toString()
 	{

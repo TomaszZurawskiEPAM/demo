@@ -3,7 +3,6 @@ package com.task06;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
-import com.amazonaws.services.lambda.runtime.events.models.dynamodb.OperationType;
 import com.amazonaws.services.lambda.runtime.events.models.dynamodb.Record;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +12,7 @@ import com.syndicate.deployment.annotations.resources.DependsOn;
 import com.syndicate.deployment.model.ResourceType;
 import com.syndicate.deployment.model.RetentionSetting;
 import com.task06.dto.AuditModify;
+import com.task06.dto.NewValue;
 import com.task06.dto.Response;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
@@ -79,8 +79,19 @@ for(Record record: dynamoEvent.getRecords() )
 		auditDto.setId(UUID.randomUUID().toString());
 		auditDto.setModificationTime(isoDateTime);
 		auditDto.setItemKey(record.getDynamodb().getKeys().get("key").getS());
-		auditDto.setNewValue(Map.of("key", record.getDynamodb().getKeys().get("key").getS(), "value",
-						Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN())));
+
+		NewValue newValue = new NewValue();
+		newValue.setKey(record.getDynamodb().getKeys().get("key").getS());
+		newValue.setValue(Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN()));
+		/*Map<String, AttributeValue> map = new HashMap<>();
+		AttributeValue key = new AttributeValue();
+		key.setS(record.getDynamodb().getKeys().get("key").getS());
+		map.put("key",key);
+		AttributeValue value = new AttributeValue();
+		value.setN(record.getDynamodb().getNewImage().get("value").getN());
+		map.put("value",value);
+*/
+		auditDto.setNewValue(newValue);
 
 		//customerTable.createTable();
 		insertTable.putItem(auditDto);
