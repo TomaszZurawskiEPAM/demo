@@ -38,7 +38,7 @@
     "region": "eu-central-1",
     "expression": "rate(1 minute)"
   },
-  "uid-storage": {
+  "uuid-storage": {
     "resource_type": "s3_bucket",
     "acl": "private",
     "location": "eu-central-1",
