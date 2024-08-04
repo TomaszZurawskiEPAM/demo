@@ -35,7 +35,7 @@ import java.util.UUID;
 
 	public Map<String, Object> handleRequest(Object request, Context context)
 	{
-		String bucketName = "cmtr-975a2528-uid-storage-test";
+		String bucketName = "cmtr-975a2528-uuid-storage-test";
 
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
