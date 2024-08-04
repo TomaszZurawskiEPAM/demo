@@ -3,6 +3,7 @@ package com.task06;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
+import com.amazonaws.services.lambda.runtime.events.models.dynamodb.OperationType;
 import com.amazonaws.services.lambda.runtime.events.models.dynamodb.Record;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +72,7 @@ context.getLogger().log(dynamoEvent.toString());
 			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 			String isoDateTime = now.format(formatter);
 Record record = dynamoEvent.getRecords().get(0);
-			if (record.getEventName().equals("INSERT")){
+			//if (OperationType.fromValue(record.getEventName())(OperationType.)){
 				AuditInsert auditDto = new AuditInsert() ;
 				auditDto.setId(UUID.randomUUID().toString());
 				auditDto.setModificationTime(isoDateTime);
@@ -83,29 +84,29 @@ Record record = dynamoEvent.getRecords().get(0);
 				System.out.println(auditDto);
 
 				Response response = new Response(201, auditDto);
-			}
+
 
 			if(record.getEventName().equals("MODIFY")){
-				AuditModify auditDto = new AuditModify() ;
-				auditDto.setId(UUID.randomUUID().toString());
-				auditDto.setModificationTime(isoDateTime);
-				auditDto.setItemKey(record.getDynamodb().getKeys().get("key").toString());
-				auditDto.setNewValue(Integer.valueOf(record.getDynamodb().getNewImage().get("value").toString()));
-				auditDto.setOldValue(Integer.valueOf(record.getDynamodb().getOldImage().get("value").toString()));
+				AuditModify auditDto2 = new AuditModify() ;
+				auditDto2.setId(UUID.randomUUID().toString());
+				auditDto2.setModificationTime(isoDateTime);
+				auditDto2.setItemKey(record.getDynamodb().getKeys().get("key").toString());
+				auditDto2.setNewValue(Integer.valueOf(record.getDynamodb().getNewImage().get("value").toString()));
+				auditDto2.setOldValue(Integer.valueOf(record.getDynamodb().getOldImage().get("value").toString()));
 
 				//customerTable.createTable();
-				modifyTable.putItem(auditDto);
-				System.out.println(auditDto);
+				modifyTable.putItem(auditDto2);
+				System.out.println(auditDto2);
 
-				Response response = new Response(201, new AuditInsert());
+				Response response2 = new Response(201, new AuditInsert());
 			}
 
 
 
 
-			Response response = new Response(201, new AuditInsert());
+			Response response3 = new Response(201, new AuditInsert());
 
-			return new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(response), HashMap.class);
+			return new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(response3), HashMap.class);
 		}
 		catch (JsonProcessingException e)
 		{
