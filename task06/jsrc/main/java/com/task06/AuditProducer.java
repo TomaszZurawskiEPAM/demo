@@ -92,7 +92,8 @@ Record record = dynamoEvent.getRecords().get(0);
 				AuditModify auditDto2 = new AuditModify() ;
 				auditDto2.setId(UUID.randomUUID().toString());
 				auditDto2.setModificationTime(isoDateTime);
-				auditDto2.setItemKey(record.getDynamodb().getKeys().get("key").toString());
+				auditDto2.setItemKey(record.getDynamodb().getKeys().get("key").getS());
+				auditDto2.setUpdatedAttribute("value");
 				auditDto2.setNewValue(Integer.valueOf(record.getDynamodb().getNewImage().get("value").getN()));
 				auditDto2.setOldValue(Integer.valueOf(record.getDynamodb().getOldImage().get("value").getN()));
 
